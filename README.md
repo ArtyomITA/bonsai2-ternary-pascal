@@ -38,7 +38,7 @@ measured by ablation in the same session. The pieces overlap, so the columns do 
 | 2 | PQ2_0 mat-vec for 1-4 columns on Pascal that reproduces the summation order of the generic mmvq path bit for bit (warp per 4 rows, no shared memory or barriers, activations in the PQ2 layout, no per-weight decode) | +18.6% | +36.9% |
 | 3 | small kernels of the decode cycle without sort: top-k for k <= 32 in two launches (scratch from the pool, no device globals), GDN concat with one thread per element | +6.1% | +3.3% |
 | 4 | Hadamard rotation (fwht, block 4096) and q8_1 quantization in the PQ2 layout fused in one kernel, read directly by the mat-vec of #2 | +4.2% | +4.5% (A/B, same thermal state) |
-| 5 | fusions with identical output: add + rms_norm (exact in-place alias), rms_norm + mul + swiglu (+ permuted cont), strided F32 copies with fastdiv and the 3 rollback copies in one launch, ssm alpha + beta F32 mat-vec in one launch, GDN conv-state gather + concat + rollback in one kernel | +10.7% | +8.0% (+7.4% A/B) |
+| 5 | fusions with identical output: add + rms_norm (exact in-place alias), rms_norm + mul + swiglu (+ permuted cont), strided F32 copies with fastdiv and the 3 rollback copies in one launch, ssm alpha + beta F32 mat-vec in one launch, GDN conv-state gather + concat + rollback in one kernel | +10.7% | +8.0% (+7.3% A/B) |
 
 Kernel launches per decode cycle: 976 before change 5, 755 after. The PQ2_0 mat-vec stays the largest share of the cycle (~65%),
 at ~145 GB/s average, far from the card's bandwidth: with the summation order fixed by the quality gate it is bound by
@@ -69,8 +69,8 @@ same points, from batch composition, and the patched build reproduces that too).
 
 - **Thermals.** Under sustained load the GTX 1080 reaches ~82-86 C and drops from ~1873 to 1632 MHz (temperature
   target, not power: ~130-150 W of 180-200 W). All the numbers above start at <= 55 C. At full heat the patched build
-  runs at ~72 tok/s; the stock build was not measured in the same thermal state, so the hot gain is between ~+30% and
-  +48% and is not pinned down. Compare builds only A/B in the same thermal state.
+  runs at ~72 tok/s; the stock build was not measured in the same thermal state, so the gain at full heat is not
+  measured. Compare builds only A/B in the same thermal state.
 - **One workload, one model.** One prompt family, ~5k-token context, 1 slot for speed. Throughput with 4 slots and
   contexts above ~14k tokens were not measured (correctness with 4 slots was).
 - **Scope.** Changes 2 and 4 only apply to PQ2_0 (PrismML's group-128 ternary format) and to the Hadamard-rotated
