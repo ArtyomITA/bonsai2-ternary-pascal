@@ -13,6 +13,8 @@ decode 51% faster on a Pascal GPU (GTX 1080, compute capability 6.1), with the s
 | greedy text, 11k tokens, and 4 concurrent slots | | identical | |
 | VRAM | | -44 MiB | |
 
+**Keywords:** llama.cpp, ggml, CUDA kernels, GTX 1080, Pascal (sm_61), older NVIDIA GPUs, ternary / 1.58-bit weights (BitNet-style), PQ2_0, Ternary Bonsai, PrismML, Qwen3.5, Gated DeltaNet (GDN), MTP (multi-token prediction), speculative decoding, quantization, local LLM inference, decode speed.
+
 One file changes: `ggml/src/ggml-cuda/ggml-cuda.cu` (+987 / -22 lines). The patch is in
 [`patches/0001-sm61-pq2_0-mtp-decode.patch`](patches/0001-sm61-pq2_0-mtp-decode.patch).
 
