@@ -1,0 +1,32 @@
+n	commit	metric	status	seconds	lines	by	description	kind	idea	spread
+1	b2e9948		crash	1520	+0 -0	W1	baseline: ggml-cuda.cu invariato, build completa da vuoto	attempt		
+2	8a58f86	55.9	keep	316	+0 -0	W1	baseline: ggml-cuda.cu invariato (rilancio dopo riferimenti scritti dal LEAD)	attempt		54.974..56.146
+3	7731e5a		crash	201	+1 -1	W1	I2: CUDA graph accese su Pascal (gate cc<VOLTA -> cc<DP4A)	attempt	I2	
+4	29037b9	54.635	discard	319	+83 -9	W2	I3:	attempt	I3	54.516..58.548
+5	4039ce4		crash	177	+0 -9	W1	I2 rimisura pulita: CUDA graph su Pascal, forma equivalente (tolto blocco gate architettura, -9 righe)	attempt	I2	
+6	ea5d18f	58.065	keep	322	+6 -1	W1	I2c: grafi CUDA su Pascal solo per batch piccoli (no grafo se mat-mul pesi quantizzati con src1 ne1>8: prefill su percorso base)	attempt	I2	57.86..58.11
+7	aeb3359		crash	73	+15 -0	W1	I1: PQ2_0 3-8 colonne su Pascal col kernel mc in-tree (layout q8_1 PQ2, niente decode per peso) instradato da ggml_cuda_mul_mat	attempt	I1	
+8	f0e73db	68.877	keep	292	+112 -0	W1	I1b: mat-vec PQ2_0 Pascal 1-4 colonne, ordine di somma del generico (warp per 4 righe, niente smem/barriere, attivazioni layout PQ2 senza decode)	attempt	I1	67.849..69.881
+9	fe7730a	59.753	discard	287	+32 -22	W1	I1c: mat-vec ordinato, i 4 chunk di un passo da 128 caricati insieme (n esterno, w srotolato), stessa catena v[w]	attempt	I1	59.405..61.432
+10	191a1ee	73.106	keep	313	+187 -2	W2	I5:	attempt	I5	72.889..73.299
+11	d0c516f		crash	131	+16 -4	W1	I1d: mat-vec ordinato, pesi di ogni unita 272 B caricati con LDG.128 in smem per warp e letti da li (idea banco W2), ordine invariato	attempt	I1	
+12	59457e2		crash	227	+90 -11	W1	I1e: copia allineata dei pesi PQ2_0 (qs 8 B per chunk + scale a parte) per il mat-vec ordinato, FFN escluse, tetto 1e9 B; VRAM extra misurata +901 MiB (perplexity ub1: picco 2964 -> 3877 MiB)	attempt	I1	
+13	45f2ffd		crash	165	+3 -2	W1	I1f: mat-vec ordinato con 2 righe per warp a 3-4 colonne (registri nc3 128->72, 4->7 blocchi/SM), ordine invariato	attempt	I1	
+14	a352a4e	72.854	discard	316	+20 -25	W2	I6b:	attempt	I6	72.811..74.95
+15	e7ddbc5	68.753	discard	345	+96 -68	W1	I1g: mat-vec PQ2_0 ordinato col kernel stage di W2 (riga K in smem con LDG.128 e prefetch) + correzione top-k di att-14; avvio a GPU 55 C	attempt	I1	67.902..71.648
+16	4a7ef41	76.205	keep	279	+125 -44	W2	fwht4096+quantize	attempt	I6	75.966..77.138
+17	963e87f		crash	249	+117 -4	W2	kernel	attempt	I6	
+18	44f2674	84.373	keep	258	+591 -9	W1	I7 F1-F5: add+rms_norm fusa su Pascal (alias in place esatto), rms_norm+mul+swiglu(+CONT permutato), copie F32 fastdiv + 3 cpy in un lancio, alpha+beta F32 in un lancio, gather+concat+rollback stato c	attempt	I7	84.263..84.774
+100001	7530566	81.694	ablation	293	+593 -9	W2	A1: (seed 1)	ablation	I6	81.137..83.277
+100002	6f7306c		crash	228	+592 -10	W2	A2: (seed 1)	ablation	I6	
+100003	387c6c3	78.119	ablation	289	+9 -591	W1	A4: att-18 senza le fusioni I7 F1-F5 (programma = att-16 rimisurato oggi)	ablation	I7	77.408..78.851
+100004	735f065		crash	148	+592 -10	W2	A3: (seed 1)	ablation	I6	
+100005	c0fdc0d	61.612	ablation	328	+1 -1	W1	A5: att-18 senza mat-vec PQ2 ordinato (predicato ggml_cuda_pq2_0_ordered_ok falso): toglie I1b e il layout PQ2 del fwht+quantize di att-16 che ne dipende	ablation	I7	61.049..61.81
+100006	dfc4878	71.922	ablation	290	+592 -10	W2	A3 (seed 1)	ablation	I6	48.606..78.355
+100007	68cae9a	57.046	baseline	363	+13 -396	W2	B1: (seed 1)	baseline	I6	55.654..57.451
+100008	2bd0ee0	55.42	baseline	350	+13 -396	W2	B2: (seed 1)	baseline	I6	54.206..57.51
+100009	cdfffa0	53.839	ablation	331	+592 -10	W2	A2 (seed 1)	ablation	I6	53.647..54.303
+100010	a51461d	57.702	control	343	+62 -900	W1	C1: programma att-9 rimisurato (sospetto termico: misurato sopra i banchi GPU di W2 alle 11:24)	control	I1	55.605..58.756
+100011	8b35a52		crash	176	+0 -0	W1	R1: programma att-18 esatto rimisurato con touch (build pulita nel log)	repeat	I7	
+100012	fb54c3a		crash	230	+592 -10	W2	A3 (seed 1)	ablation	I6	
+100013	8ccd589	74.928	ablation	305	+592 -10	W2	A2 (seed 1)	ablation	I6	70.722..76.57
