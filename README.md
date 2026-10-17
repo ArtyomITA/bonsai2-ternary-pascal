@@ -109,7 +109,9 @@ the gate compares against the stock build on the same text).
 
 ## How it was done
 
-An overnight autoresearch run: two worker agents with one git worktree each, a proposer, an auditor, a registrar and a
+The mat-vec alone (change 2) is proposed to the fork in [PrismML-Eng/llama.cpp#368](https://github.com/PrismML-Eng/llama.cpp/pull/368).
+
+An overnight autoresearch run ([research mode of the chatroom plugin](https://github.com/Partido-De-What/claude-plugins/blob/main/docs/research-mode.md)): two worker agents with one git worktree each, a proposer, an auditor, a registrar and a
 literature searcher, coordinated in a shared chat with a sealed evaluator; 18 attempts, then ablations, baselines and a
 4-slot check. `results/results.tsv` lists every run.
 
