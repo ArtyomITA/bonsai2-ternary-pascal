@@ -40,7 +40,7 @@ measured by ablation in the same session. The pieces overlap, so the columns do 
 | 4 | Hadamard rotation (fwht, block 4096) and q8_1 quantization in the PQ2 layout fused in one kernel, read directly by the mat-vec of #2 | +4.2% | not measured on a quiet machine |
 | 5 | fusions with identical output: add + rms_norm (exact in-place alias), rms_norm + mul + swiglu (+ permuted cont), strided F32 copies with fastdiv and the 3 rollback copies in one launch, ssm alpha + beta F32 mat-vec in one launch, GDN conv-state gather + concat + rollback in one kernel | +10.7% | +8.0% (+7.4% A/B) |
 
-Kernel launches per decode cycle: about 1176 to 755. The PQ2_0 mat-vec stays the largest share of the cycle (~65%),
+Kernel launches per decode cycle: 976 before change 5, 755 after. The PQ2_0 mat-vec stays the largest share of the cycle (~65%),
 at ~145 GB/s average, far from the card's bandwidth: with the summation order fixed by the quality gate it is bound by
 instructions and occupancy, not memory.
 
