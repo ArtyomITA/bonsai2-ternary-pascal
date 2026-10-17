@@ -37,7 +37,7 @@ measured by ablation in the same session. The pieces overlap, so the columns do 
 | 1 | CUDA graphs on Pascal, only for small batches (no graph when a quantized mat-mul has more than 8 columns, so prefill keeps the stock path) | +3.9% | +17.1% (A/B, same thermal state) |
 | 2 | PQ2_0 mat-vec for 1-4 columns on Pascal that reproduces the summation order of the generic mmvq path bit for bit (warp per 4 rows, no shared memory or barriers, activations in the PQ2 layout, no per-weight decode) | +18.6% | +36.9% |
 | 3 | small kernels of the decode cycle without sort: top-k for k <= 32 in two launches (scratch from the pool, no device globals), GDN concat with one thread per element | +6.1% | +3.3% |
-| 4 | Hadamard rotation (fwht, block 4096) and q8_1 quantization in the PQ2 layout fused in one kernel, read directly by the mat-vec of #2 | +4.2% | not measured on a quiet machine |
+| 4 | Hadamard rotation (fwht, block 4096) and q8_1 quantization in the PQ2 layout fused in one kernel, read directly by the mat-vec of #2 | +4.2% | +4.5% (A/B, same thermal state) |
 | 5 | fusions with identical output: add + rms_norm (exact in-place alias), rms_norm + mul + swiglu (+ permuted cont), strided F32 copies with fastdiv and the 3 rollback copies in one launch, ssm alpha + beta F32 mat-vec in one launch, GDN conv-state gather + concat + rollback in one kernel | +10.7% | +8.0% (+7.4% A/B) |
 
 Kernel launches per decode cycle: 976 before change 5, 755 after. The PQ2_0 mat-vec stays the largest share of the cycle (~65%),
