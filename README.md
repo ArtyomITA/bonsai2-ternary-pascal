@@ -22,6 +22,7 @@ One file changes: `ggml/src/ggml-cuda/ggml-cuda.cu` (+987 / -22 lines). The patc
 directly on its ternary weights on this GTX 1080 (20.2 to 3.3 s per example, gradients checked at every step), and the result
 is [TernaryPilot v1](https://huggingface.co/adriandj3/TernaryPilot-v1-Computer-Browser-Use-LoRA), a computer use and browser
 use LoRA for the model.
+Why the LoRA is needed in the first place (ternary weights cost most of the pixel-click skill) is in [`docs/ternary-gui-grounding.md`](docs/ternary-gui-grounding.md).
 
 ## Setup
 
