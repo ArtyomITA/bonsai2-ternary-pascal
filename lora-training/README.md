@@ -96,7 +96,7 @@ Code: MIT (see `LICENSE` in this folder). Training data used for TernaryPilot: A
   author       = {Iancu, Adrian Ciprian},
   title        = {Training LoRA adapters on Ternary Bonsai 2 9B with a GTX 1080},
   year         = {2026},
-  howpublished = {\url{https://github.com/ArtyomITA/bonsai2-ternary-pascal/tree/main/lora-training}}
+  howpublished = {\url{https://github.com/ArtyomITA/bonsai2-ternary-pascal/tree/master/lora-training}}
 }
 ```
 
