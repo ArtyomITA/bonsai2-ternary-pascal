@@ -18,6 +18,11 @@ decode 51% faster on a Pascal GPU (GTX 1080, compute capability 6.1), with the s
 One file changes: `ggml/src/ggml-cuda/ggml-cuda.cu` (+987 / -22 lines). The patch is in
 [`patches/0001-sm61-pq2_0-mtp-decode.patch`](patches/0001-sm61-pq2_0-mtp-decode.patch).
 
+**New: LoRA training on the same card.** [`lora-training/`](lora-training/) is the kit I used to fine-tune Ternary Bonsai 2 9B
+directly on its ternary weights on this GTX 1080 (20.2 to 3.3 s per example, gradients checked at every step), and the result
+is [TernaryPilot v1](https://huggingface.co/adriandj3/TernaryPilot-v1-Computer-Browser-Use-LoRA), a computer use and browser
+use LoRA for the model.
+
 ## Setup
 
 - GPU: GTX 1080 8 GB (Pascal, sm_61), Windows 11, CUDA 12.4, MSVC 14.38, `-DCMAKE_CUDA_ARCHITECTURES=61-real`.
