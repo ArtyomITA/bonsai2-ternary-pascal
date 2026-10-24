@@ -59,7 +59,7 @@ Things that did not work:
 
 Two things I had to work around, worth knowing if you train on old GPUs:
 - `transformers` 5.17 `gradient_checkpointing_enable()` always calls `enable_input_require_grads()`. With non-reentrant checkpointing it is not needed, and it forces backward from layer 0 even when the lower layers are frozen: freezing them saved nothing until I disabled it (then 8 frozen layers -18%, 16 -35%, 24 -53%).
-- `torch.optim.Muon` runs Newton-Schulz in bfloat16, which Pascal does not have. I wrote an fp32 version (cosine 0.9999 against the original on the same input).
+- `torch.optim.Muon` always runs Newton-Schulz in bfloat16. Pascal has no native bf16, but PyTorch emulates it and on my card it is not slower (two 4096x4096 matmuls: 166 ms in bf16, 214 ms in fp32). I still keep an fp32 version for full precision (cosine 0.9999 against the original on the same input).
 
 ## What made it better
 
