@@ -1,5 +1,7 @@
 # Ternary Bonsai 2 9B on a GTX 1080 (sm_61): +51% decode with bit-identical output
 
+By **Adrian Ciprian Iancu** · [GitHub](https://github.com/ArtyomITA) · [Hugging Face](https://huggingface.co/adriandj3) · [LinkedIn](https://www.linkedin.com/in/adrian-ciprian-iancu-a2a477391) · [site](https://artyomita.github.io/)
+
 A set of CUDA changes to the [PrismML fork of llama.cpp](https://github.com/PrismML-Eng/llama.cpp) that makes
 [Ternary-Bonsai-2-9B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-9B-gguf) (PQ2_0 weights + MTP draft head)
 decode 51% faster on a Pascal GPU (GTX 1080, compute capability 6.1), with the same logits as the stock build.
